@@ -3,12 +3,12 @@
 /* 1 current post essence:
  * Creates once. Constant.
  */
-public class Post {
+class Post {
     private $postId;
     private $authorId;
     private $postDate;
     private $picLink;
-    private $picLinkMin;  //нужен снаружи
+    private $picLinkMin;
     private $postDesc;
     private $commentCount = 0;
     private $postEssence = [];
@@ -30,7 +30,6 @@ public class Post {
     }
 
     //constructor
-    //доделать метод!
     public function __construct($postId) {
         include_once "../DB/DbConnect.php";
         $this->postId = $postId;
@@ -67,7 +66,7 @@ public class Post {
     // метод считает и возвращает количество комментов
     function getCommentCount(): int {
         global $postId;
-        
+
         include_once "../DB/DbConnect.php";
         $query = 'SELECT com_id FROM Comments WHERE post_id = '.$postId; //протестить что переменная в конце учитывается!
         $commentsArray = mysql_getcolumn($query); //массив id

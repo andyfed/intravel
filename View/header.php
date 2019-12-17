@@ -8,13 +8,13 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Mount Travel site</title>
+    <title>In Travel</title>
   </head>
   <body>
   <div class="container-fluid">
       <div class="row bg-dark">
           <div class="col-12 " style="color: aliceblue; margin: 10px">
-              <b>MountTravel</b>
+              <b>InTravel</b>
           </div>
       </div>
   </div>

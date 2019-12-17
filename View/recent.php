@@ -4,7 +4,7 @@
 
 ?>
 
-
+это html-шаблон
 
 <div class="container-fluid">
 
