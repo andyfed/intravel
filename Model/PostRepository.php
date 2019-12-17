@@ -5,7 +5,7 @@
  * первичного запроса. Возврат на 1-ю страницу обновит время первичного запроса.
  *
  */
-class postRepository {
+class PostRepository {
     private $listOfPosts = [];      //массив постов, главное возвращаемое значение
     private $picsOnPage = 20;       //количество изображений на 1 странице
     private $lastId = 0;            //int определяется динамически

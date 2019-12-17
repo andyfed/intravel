@@ -32,6 +32,7 @@ public class Post {
     //constructor
     //доделать метод!
     public function __construct($postId) {
+        include_once "../DB/DbConnect.php";
         $this->postId = $postId;
         global $authorId;
         global $postDate;
@@ -40,18 +41,16 @@ public class Post {
         global $postDesc;
         global $commentCount;
 
-        //весь следующий блок - временная заплатка для теста. Добавить запросы в БД!
-        // ИСПРАВИТЬ!
-        $authorId =
-        $postDate =
-        $picLink =
-        $postDesc =
+        $authorId = 'SELECT user_id FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
+        $postDate = 'SELECT date_time FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
+        $picLink = 'SELECT pic_link FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
+        $postDesc = 'SELECT text FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
 
         $picLinkMin = $this->getMini();
         $commentCount = $this->getCommentCount();
     }
 
-    // метод возвращает ссылку на миниатюру изображения
+    // метод создает ссылку на миниатюру изображения
     function createPreviewLink(): void {
         global $picLink;
         global $picLinkMin;
@@ -60,25 +59,24 @@ public class Post {
         $picLinkMin = "".$temp."200";
     }
 
+    //метод возвращает ссылку на миниатюру изображения
     public function getMini(): string {
         return $this->picLinkMin;
     }
 
-    //метод считает и возвращает количество комментов
-    // ИСПРАВИТЬ!
+    // метод считает и возвращает количество комментов
     function getCommentCount(): int {
         global $postId;
-
-
-        //дописать метод с запросом
-        //когда будет соединение с БД
-        return ; //исправить возвращаемое знаечение когда метод будет готов
+        
+        include_once "../DB/DbConnect.php";
+        $query = 'SELECT com_id FROM Comments WHERE post_id = '.$postId; //протестить что переменная в конце учитывается!
+        $commentsArray = mysql_getcolumn($query); //массив id
+        return count($commentsArray);
     }
 
     //return URI of the post
-    // ИСПРАВИТЬ!
     public function getPostIdLink(): string {
         global $postId;
-        return 'post#'.$postId.'php';
+        return 'post/'.$postId.'.php';
     }
 }

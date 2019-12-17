@@ -6,7 +6,8 @@ CREATE TABLE `Users` (
   `name` varchar(30) NULL,
   `surname` varchar(30) NULL,
   `email` varchar(40) NOT NULL,
-  `role` varchar(30) NOT NULL
+  `role` varchar(30) NOT NULL,
+  `password` varchar(30) NOT NULL
 );
 
 CREATE TABLE `Posts` (
@@ -27,3 +28,30 @@ CREATE TABLE `Comments` (
   FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`),
   FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
 );
+
+#create test users
+INSERT INTO `Users` (`user_id`, `nickname`, `name`, `surname`, `email`, `role`, `password`) VALUES
+(1,	'Admin01',	'Alexey',	'Petrov',	'admin01@test.com',	'admin',	'root'),
+(2,	'Author01',	'Sergey',	'Kozlov',	'author01@test.com',	'author',	'root'),
+(3,	'author-02',	'Margarita',	'Orlova',	'author-02@test.com',	'author',	'root'),
+(4,	'reader_01',	'Mike',	NULL,	'reader_01@test.com',	'reader',	'root'),
+(5,	'Reader_02',	NULL,	'Fedorov',	'reader_02@test.com',	'reader',	'root');
+
+#create test posts
+INSERT INTO `Posts` (`post_id`, `date_time`, `text`, `pic_link`, `user_id`) VALUES
+(1,	1576568934,	'Hello world!',	'https://picsum.photos/id/1016/400',	2),
+(2,	1576571264,	'It was a great travel :)',	'https://picsum.photos/id/10/400',	3),
+(3,	1576571657,	NULL,	'https://picsum.photos/id/100/400',	2),
+(4,	1576571687,	NULL,	'https://picsum.photos/id/1006/400',	3),
+(5,	1576571695,	NULL,	'https://picsum.photos/id/1011/400',	2),
+(6,	1576571701,	NULL,	'https://picsum.photos/id/1015/400',	2),
+(7,	1576571754,	NULL,	'https://picsum.photos/id/1018/400',	3),
+(8,	1576571757,	NULL,	'https://picsum.photos/id/1020/400',	2),
+(9,	1576571790,	NULL,	'https://picsum.photos/id/1036/400',	3),
+(10,	1576571832,	NULL,	'https://picsum.photos/id/1039/400',	2);
+
+#create test comments
+INSERT INTO `Comments` (`com_id`, `post_id`, `user_id`, `text`, `date_time`) VALUES
+(1,	1,	3,	'cool pic!',	1576568944),
+(2,	3,	3,	'wow 0_0',	1576571667),
+(3,	1,	2,	'thanks ;-)',	1576571832);

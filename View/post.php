@@ -55,7 +55,7 @@
                     <div class="col">
 
                         <!-- вставить сюда переменные из контроллера, страница галлереи, с которой был переход -->
-                        <a href="recent#<?php $page ?>.php"><button type="button" class="btn btn-dark">Back to gallery</button></a>
+                        <a href="recent#<?php $postRepository ?>.php"><button type="button" class="btn btn-dark">Back to gallery</button></a>
                     </div>
                 </div>
                 <!-- Back button -->

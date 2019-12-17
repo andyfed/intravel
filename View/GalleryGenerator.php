@@ -2,23 +2,17 @@
 //const ECHO1 = "<div class=\"col-1\"> </div>";
 
 class GalleryGenerator {
-
-    private $newPosts; //полученный массив [postId - object Post]
-
-    //хранит ссылки на посты
+    //stores post hyperlinks
     private $postHrefs =[];
-
-    //хранит ссылки на превьюшки
+    //stores preview hyperlinks
     private $imgSrc = [];
 
-
-    public function __construct($recentPosts) {
-        global $newPosts;
-        $newPosts = $recentPosts;
-        $this->fillArrays($newPosts);
+    //with constructing fill the arrays
+    function __construct($listOfPosts) { //argument array [postId - object Post]
+        $this->fillArrays($listOfPosts);
     }
 
-    //создает абсолютную ссылку из $postId
+    //creates absolute hyperlink from $postId
     function genPostHref($postId): string {
 
         $postHref = "http://test.com/post/$postId.php";
