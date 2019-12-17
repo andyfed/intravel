@@ -1,0 +1,29 @@
+CREATE DATABASE `DB1`;
+
+CREATE TABLE `Users` (
+  `user_id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `nickname` varchar(30) NOT NULL,
+  `name` varchar(30) NULL,
+  `surname` varchar(30) NULL,
+  `email` varchar(40) NOT NULL,
+  `role` varchar(30) NOT NULL
+);
+
+CREATE TABLE `Posts` (
+  `post_id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `date_time` int NOT NULL,
+  `text` varchar(1000) NULL,
+  `pic_link` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
+);
+
+CREATE TABLE `Comments` (
+  `com_id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `text` varchar(100) NOT NULL,
+  `date_time` int NOT NULL,
+  FOREIGN KEY (`post_id`) REFERENCES `Posts` (`post_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
+);
