@@ -1,12 +1,18 @@
 <?php
 
+namespace Models;
+use DB;
+
 /* 1 current post essence:
  * Creates once. Constant.
  */
 class Post {
+
+
     private $postId;
     private $authorId;
-    private $postDate;
+    private $postDate;  //stores in sec UNIXtime - need to convert when show to user date('Y-m-d ')
+                        //echo date('j.m.Y H:i:s', strtotime($postDate));
     private $picLink;
     private $picLinkMin;
     private $postDesc;
@@ -25,12 +31,16 @@ class Post {
     }
 
     //return array with all class values
-    public function getPostEssence(): array {
+    public function getPost(): array {
         return $this->postEssence;
     }
 
     //constructor
     public function __construct($postId) {
+        $this->createEssence($postId);
+    }
+
+    function createEssence($postId){
         include_once "../DB/DbConnect.php";
         $this->postId = $postId;
         global $authorId;
@@ -40,10 +50,10 @@ class Post {
         global $postDesc;
         global $commentCount;
 
-        $authorId = 'SELECT user_id FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
-        $postDate = 'SELECT date_time FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
-        $picLink = 'SELECT pic_link FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
-        $postDesc = 'SELECT text FROM Posts WHERE id = '.$this->postId.' LIMIT 1'; //+
+        $authorId = 'SELECT user_id FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
+        $postDate = 'SELECT date_time FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
+        $picLink = 'SELECT pic_link FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
+        $postDesc = 'SELECT text FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
 
         $picLinkMin = $this->getMini();
         $commentCount = $this->getCommentCount();
@@ -68,9 +78,9 @@ class Post {
         global $postId;
 
         include_once "../DB/DbConnect.php";
-        $query = 'SELECT com_id FROM Comments WHERE post_id = '.$postId; //протестить что переменная в конце учитывается!
-        $commentsArray = mysql_getcolumn($query); //массив id
-        return count($commentsArray);
+        $query = 'SELECT COUNT(com_id) FROM Comments WHERE post_id = '.$postId.';';
+        $count = DB\$pdo;
+        return $count($query);           //массив id НЕТ mysql_getcolumn в станд библиотеке
     }
 
     //return URI of the post

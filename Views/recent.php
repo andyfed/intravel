@@ -1,6 +1,6 @@
 <?php include_once "header.php";
 
-//include_once "../Controller/recentPageController.php";
+//include_once "../Controllers/recentPageController.php";
 
 ?>
 

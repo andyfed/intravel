@@ -1,10 +1,21 @@
 <?php
+namespace DB;
 
-include_once 'dbconfig.php';
-include_once 'queries.php';
+class DbConnect {
+    private $conn;
+    private $host = 'localhost';
+    private $dbname = 'DB1';
+    private $username = 'root';
+    private $password = 'root';
 
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    public function getConn(){
+        if (!is_set($this->conn))
+            $this->conn = new \mysqli("mysql:host=$host;dbname=$this->dbname", $this->username, $this->password);
+        return $this->conn;
+    }
 
+
+}
 /*
 $sql_1 = $lastPostsIdList_1;
 $sql_n = $lastPostsIdList_next;

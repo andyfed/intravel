@@ -1,12 +1,16 @@
 <?php
 
+namespace Models;
+
 /* Объект класса postRepository создается относительно фиксированного времени первичного запроса
  * переход на следующую страницу галереи не учитывает записи, добавленные после времени
  * первичного запроса. Возврат на 1-ю страницу обновит время первичного запроса.
  *
+ * ПОРЯДОК ВЫЗОВА НАРУШЕН!
+ *
  */
 class PostRepository {
-    private $listOfPosts = [];      //массив постов, главное возвращаемое значение
+    private $listOfPosts = [];      //массив постов, главное возвращаемое значение //function getListOfPosts($pageNumber)
     private $picsOnPage = 20;       //количество изображений на 1 странице
     private $lastId = 0;            //int определяется динамически
     private $lastPostsIdList = [];  //int[] определяется динамически, зависит от $lastId
@@ -16,9 +20,14 @@ class PostRepository {
 
     //сделать метод-генератор ссылок миниатюры из
 
-    public function __construct() {
+    public function createRepo(){
         $this->setCurrentMoment();
         $this->getLastId();
+        //$this->createListOfPosts(1);
+    }
+
+    function __construct() {
+        $this->createRepo();
     }
 
     //фиксируем время первичного запроса
@@ -72,10 +81,8 @@ class PostRepository {
 
     //главный метод класса, возвращает итоговое значение, инициирует дозаполнение массива $listOfPosts по мере запросов
     public function getListOfPosts($pageNumber): array {
-        global $listOfPosts;
-
         $this->createListOfPosts($pageNumber);
-        return $listOfPosts;
+        return $this->listOfPosts;
     }
 
 }
