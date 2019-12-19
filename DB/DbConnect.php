@@ -9,8 +9,8 @@ class DbConnect {
     private $password = 'root';
 
     public function getConn(){
-        if (!is_set($this->conn))
-            $this->conn = new \mysqli("mysql:host=$host;dbname=$this->dbname", $this->username, $this->password);
+        if (!isset($this->conn))
+            $this->conn = new \mysqli("mysql:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
         return $this->conn;
     }
 

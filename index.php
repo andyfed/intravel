@@ -1,18 +1,21 @@
 <?php
 
 //strong types ON(1)
-declare(strict_types=1);
+//declare(strict_types=1);
 
-//autoload (PCR-0 / PCR-4)
-require_once __DIR__.'System/autoload.php';
+//убрать при продакшене
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+//autoload (PSR-0)
+require_once __DIR__ . '/System/autoload.php';
 
 //routing run
-try {
-    System\App::run();
-} catch (ErrorException $e) {
-    include_once 'Views/404.php';
-    echo 'Cannot run routing!';
-}
+System\App::run();
+
+
 
 /*
 // OLD VERSION of routing
@@ -21,7 +24,7 @@ $uri = $_SERVER['REQUEST_URI'];
 $uri = explode("/", $uri);
 
 if (empty($uri[1])) {
-    //header($_SERVER['REQUEST_URI']."recent.php");
+    //header($_SERVER['REQUEST_URI']."gallery.php");
     require_once "Controllers/recentPageController.php";
 }
 

@@ -17,7 +17,7 @@ class Post {
     private $picLinkMin;
     private $postDesc;
     private $commentCount = 0;
-    private $postEssence = [];
+    private $postEssence = [];      //needed for 'post' page
 
     //return associative array of variables
     function createPostEssence()
@@ -55,17 +55,14 @@ class Post {
         $picLink = 'SELECT pic_link FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
         $postDesc = 'SELECT text FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
 
+        $this->createPreviewLink();
         $picLinkMin = $this->getMini();
         $commentCount = $this->getCommentCount();
     }
 
     // метод создает ссылку на миниатюру изображения
     function createPreviewLink(): void {
-        global $picLink;
-        global $picLinkMin;
-
-        $temp = explode("400", $picLink);
-        $picLinkMin = "".$temp."200";
+        $this->picLinkMin = str_replace("400", "200", $this->picLink);
     }
 
     //метод возвращает ссылку на миниатюру изображения

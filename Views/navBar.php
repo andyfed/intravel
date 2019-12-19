@@ -8,10 +8,10 @@
         <ul class="pagination">
             <li class="page-item"><a class="page-link" href="http://test.com/recent.php?page=1">First</a></li>
             <!-- sending $page via GET method -->
-            <li class="page-item active"><a class="page-link" href="http://test.com/recent.php?page=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="http://test.com/recent.php?page=2">2</a></li>
-            <li class="page-item"><a class="page-link" href="http://test.com/recent.php?page=3">3</a></li>
-            <li class="page-item"><a class="page-link" href="http://test.com/recent.php?page=3">Last</a></li>
+            <li class="page-item active"><a class="page-link" href="http://test.com/gallery/recent/1">1</a></li>
+            <li class="page-item"><a class="page-link" href="http://test.com/gallery/recent/2">2</a></li>
+            <li class="page-item"><a class="page-link" href="http://test.com/gallery/recent/3">3</a></li>
+            <li class="page-item"><a class="page-link" href="http://test.com/gallery/recent/3">Last</a></li>
         </ul>
     </nav>
     </div>

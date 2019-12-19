@@ -1,12 +1,14 @@
 <?php
 
-
 namespace System;
 
 
 class View
 {
-    public static function render(string $path, array $data=[]){
+    public $data;
+
+    public static function render(string $path, array $data){
+
         $fullPath = __DIR__.'/../Views/'.$path.'.php';
 
         if (!file_exists(($fullPath)))
@@ -14,7 +16,8 @@ class View
 
         if (!empty($data)) {
             foreach ($data as $key => $value) {
-                $key = $value;
+                $$key = $key;
+                $$value = $value;
             }
         }
 
