@@ -1,7 +1,7 @@
 <?php
 
 namespace Models;
-use DB\DbConnect;
+use DB\DBconn;
 /* Объект класса postRepository создается относительно фиксированного времени первичного запроса
  * переход на следующую страницу галереи не учитывает записи, добавленные после времени
  * первичного запроса. Возврат на 1-ю страницу обновит время первичного запроса.
@@ -9,6 +9,7 @@ use DB\DbConnect;
  * ПОРЯДОК ВЫЗОВА НАРУШЕН!
  *
  */
+
 class PostRepository {
     private $listOfPosts = [];      //массив постов, главное возвращаемое значение //function getListOfPosts($pageNumber)
 
@@ -19,12 +20,13 @@ class PostRepository {
     private $pageNumber = 1;        // нужен/ позже приходит в параметре запроса
     private $picsOnPage = 20;       //количество изображений на 1 странице
 
+    public $dsn = "mysql:host=localhost;dbname=DB1";
 
     //сделать метод-генератор ссылок миниатюры из
 
     public function createRepo(){
         $this->setCurrentMoment();
-        $this->getLastId();
+        $this->getAbsLastId();
         $this->createLastIdList();
         //$this->createListOfPosts(1);
     }
@@ -39,34 +41,40 @@ class PostRepository {
     }
 
     //берем крайний postId в таблице на время первичного запроса
-    private function getLastId(): void {
+    private function getAbsLastId(): void {
         global $lastId;
 
-        //include_once "\DB\DbConnect.php";               //НАСТРОИТЬ КОННЕКТ с БД этот файд не находит
-        $lastId = 'SELECT 1 id FROM Posts WHERE date <= '.$this->currentMoment;
+        $pdo = new \PDO($this->dsn,'root','root');
+        $sql = 'SELECT MAX(post_id) FROM Posts';
+        $query = $pdo->prepare($sql);
+        $lastId = $query->fetch();
     }
 
-    //возвращает массив из #id последних 20-ти  постов              //НИГДЕ НЕТ!
+    //возвращает массив из #id последних 20-ти  постов              FIX SQL!
     function createLastIdList() {
 
         if ($this->pageNumber > 1) {
             $this->lastId = $this->lastIdList[19]; // для 2-й страницы и следующих - переопределяем $lastId (берем из существующего списка)
 
-            include_once "../DB/DbConnect.php";
-
-            $query = 'SELECT id FROM Posts WHERE id < '.$this->lastId.' LIMIT '.$this->picsOnPage;
             //получает массив последних postId меньших чем текущий $lastId ()
-            $this->lastIdList = mysql_getcolumn($query, TRUE);
-
+            $pdo = new \PDO($this->dsn,'root','root');
+            $sql ='SELECT post_id FROM Posts WHERE post_id < :lastId LIMIT :picsOnPage';
+            $query = $pdo->prepare($sql);
+            $query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
+            $this->lastIdList = $query->fetchAll();
+            //деструктор PDO сам закрывает соединение
         } else {
             //заполнение списка последних 20-ти id постов начиная с $lastId (включительно)
-            $query = 'SELECT id FROM Posts WHERE id <= '.$this->lastId.' LIMIT '.$this->picsOnPage;
-            $this->lastIdList = mysql_getcolumn($query, TRUE);
+            $pdo = new \PDO($this->dsn,'root','root');
+            $sql ='SELECT post_id FROM Posts WHERE post_id <= :lastId LIMIT :picsOnPage';
+            $query = $pdo->prepare($sql);
+            $this->lastIdList = $query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
+            //деструктор PDO сам закрывает соединение
         }
     }
 
     public function getLastIdList(){  //не факт, что будет возвращать корректные значения
-        return $this->lastIdList;                                  //НИГДЕ НЕТ!
+        return $this->lastIdList;
     }
 
     //заполняет массив значениями по мере запроса следующих страниц

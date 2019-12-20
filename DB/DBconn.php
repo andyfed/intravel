@@ -1,17 +1,22 @@
 <?php
 namespace DB;
 
-class DbConnect {
+class DBconn {
     private $conn;
     private $host = 'localhost';
     private $dbname = 'DB1';
     private $username = 'root';
     private $password = 'root';
 
+    public $dsn = "mysql:host='localhost';dbname='DB1,'root',root'";
+
     public function getConn(){
         if (!isset($this->conn))
-            $this->conn = new \mysqli("mysql:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
+            $this->conn = new \PDO($this->dsn);
         return $this->conn;
+    }
+    public function closeConn(){
+        $this->conn = null;
     }
 
 

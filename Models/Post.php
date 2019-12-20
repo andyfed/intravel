@@ -7,17 +7,17 @@ use DB;
  * Creates once. Constant.
  */
 class Post {
-
-
     private $postId;
     private $authorId;
     private $postDate;  //stores in sec UNIXtime - need to convert when show to user date('Y-m-d ')
-                        //echo date('j.m.Y H:i:s', strtotime($postDate));
+                        //echo date('j.m.Y H:i:s', strtotime($postDate)) for 'Post' page;
     private $picLink;
     private $picLinkMin;
     private $postDesc;
     private $commentCount = 0;
     private $postEssence = [];      //needed for 'post' page
+
+    public $dsn = "mysql:host=localhost;dbname=DB1";
 
     //return associative array of variables
     function createPostEssence()
@@ -41,7 +41,6 @@ class Post {
     }
 
     function createEssence($postId){
-        include_once "../DB/DbConnect.php";
         $this->postId = $postId;
         global $authorId;
         global $postDate;
@@ -50,11 +49,20 @@ class Post {
         global $postDesc;
         global $commentCount;
 
-        $authorId = 'SELECT user_id FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
-        $postDate = 'SELECT date_time FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
-        $picLink = 'SELECT pic_link FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
-        $postDesc = 'SELECT text FROM Posts WHERE id = '.$this->postId.' LIMIT 1';
-
+        //PDO
+        $pdo = new \PDO($this->dsn, 'root','root');
+        $sql_authorId = 'SELECT user_id FROM Posts WHERE id = :postId LIMIT 1';
+        $sql_postDate = 'SELECT date_time FROM Posts WHERE id = :postId LIMIT 1';
+        $sql_picLink = 'SELECT pic_link FROM Posts WHERE id = :postId LIMIT 1';
+        $sql_postDesc = 'SELECT text FROM Posts WHERE id = :postId LIMIT 1';
+        $query = $pdo->prepare($sql_authorId);
+        $authorId = $query->execute([':postId'=>$postId]);
+        $query = $pdo->prepare($sql_postDate);
+        $postDate = $query->execute([':postId'=>$postId]);
+        $query = $pdo->prepare($sql_picLink);
+        $picLink = $query->execute([':postId'=>$postId]);
+        $query = $pdo->prepare($sql_postDesc);
+        $postDesc = $query->execute([':postId'=>$postId]);
         $this->createPreviewLink();
         $picLinkMin = $this->getMini();
         $commentCount = $this->getCommentCount();
@@ -72,12 +80,10 @@ class Post {
 
     // метод считает и возвращает количество комментов
     function getCommentCount(): int {
-        global $postId;
-
-        include_once "../DB/DbConnect.php";
-        $query = 'SELECT COUNT(com_id) FROM Comments WHERE post_id = '.$postId.';';
-        $count = DB\$pdo;
-        return $count($query);           //массив id НЕТ mysql_getcolumn в станд библиотеке
+        $pdo = new \PDO($this->dsn,'root','root');
+        $sql = 'SELECT COUNT(com_id) FROM Comments WHERE post_id = :postId';
+        $query = $pdo->prepare($sql);
+        return $query->execute([':postId'=>$this->postId]);
     }
 
     //return URI of the post

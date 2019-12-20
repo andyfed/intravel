@@ -20,7 +20,7 @@ private $galleryPage; // [post id => post object]
         if ($arg === 1)                                 //for first call creates new PostRepository - 'postRepo'
             $postRepo = new PostRepository();
 
-        //if ($postRepo)                     //after call need to make sure that postRepo is exist
+        //if ($postRepo)                     //after call need to make sure that postRepo is exist. or don't
         $galleryPage = $postRepo->getListOfPosts($arg);      //than get list of posts for the page
 
         $pageNumber = $arg;                       //save current page number for 'back' function from 'post' page
