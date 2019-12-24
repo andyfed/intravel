@@ -6,19 +6,17 @@ use DB\DBconn;
  * переход на следующую страницу галереи не учитывает записи, добавленные после времени
  * первичного запроса. Возврат на 1-ю страницу обновит время первичного запроса.
  *
- * ПОРЯДОК ВЫЗОВА НАРУШЕН!
- *
  */
 
 class PostRepository {
-    private $listOfPosts = [];      //массив постов, главное возвращаемое значение //function getListOfPosts($pageNumber)
+    private $listOfPosts;      //массив постов, главное возвращаемое значение //function getListOfPosts($pageNumber)
 
     private $currentMoment;         //первичное время запроса
     private $lastId = 0;            //int определяется динамически
-    private $lastIdList = [];       //int[] определяется динамически, зависит от $lastId
+    private $lastIdList;       //int[] определяется динамически, зависит от $lastId
 
     private $pageNumber = 1;        // нужен/ позже приходит в параметре запроса
-    private $picsOnPage = 20;       //количество изображений на 1 странице
+    private $picsOnPage = 10;       //количество изображений на 1 странице
 
     public $dsn = "mysql:host=localhost;dbname=DB1";
 
@@ -42,38 +40,51 @@ class PostRepository {
 
     //берем крайний postId в таблице на время первичного запроса
     private function getAbsLastId(): void {
-        global $lastId;
-
         $pdo = new \PDO($this->dsn,'root','root');
         $sql = 'SELECT MAX(post_id) FROM Posts';
         $query = $pdo->prepare($sql);
-        $lastId = $query->fetch();
+        $query->execute();
+        $lastId = $query->fetch(\PDO::FETCH_NUM);
+        $this->lastId = $lastId[0];
     }
 
     //возвращает массив из #id последних 20-ти  постов              FIX SQL!
     function createLastIdList() {
 
         if ($this->pageNumber > 1) {
-            $this->lastId = $this->lastIdList[19]; // для 2-й страницы и следующих - переопределяем $lastId (берем из существующего списка)
+            $this->lastId = $this->lastIdList[sizeof($this->lastIdList)-1]; // для 2-й страницы и следующих - переопределяем $lastId (берем из существующего списка)
 
             //получает массив последних postId меньших чем текущий $lastId ()
             $pdo = new \PDO($this->dsn,'root','root');
-            $sql ='SELECT post_id FROM Posts WHERE post_id < :lastId LIMIT :picsOnPage';
+            $sql ='SELECT post_id FROM Posts WHERE post_id < ? ORDER BY post_id DESC LIMIT ?';
             $query = $pdo->prepare($sql);
-            $query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
-            $this->lastIdList = $query->fetchAll();
+            //$query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
+            $query->bindValue(1, $this->lastId, \PDO::PARAM_INT);
+            $query->bindValue(2, $this->picsOnPage, \PDO::PARAM_INT);
+            $query->execute();
+            $this->lastIdList = $query->fetchAll(\PDO::FETCH_NUM);
             //деструктор PDO сам закрывает соединение
         } else {
+            //$this->lastId = intval($this->lastId);
+            //$this->picsOnPage = intval($this->picsOnPage);
             //заполнение списка последних 20-ти id постов начиная с $lastId (включительно)
             $pdo = new \PDO($this->dsn,'root','root');
-            $sql ='SELECT post_id FROM Posts WHERE post_id <= :lastId LIMIT :picsOnPage';
+            $sql ='SELECT post_id FROM Posts WHERE post_id <= ? ORDER BY post_id DESC LIMIT ?';
             $query = $pdo->prepare($sql);
-            $this->lastIdList = $query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
+            $query->bindValue(1, $this->lastId, \PDO::PARAM_INT);
+            $query->bindValue(2, $this->picsOnPage, \PDO::PARAM_INT);
+            //$query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
+            $this->lastIdList = $query->fetchAll(\PDO::FETCH_COLUMN);// ПРИХОДИТ FALSE !!!
             //деструктор PDO сам закрывает соединение
+
+            //TEST. Delete in prod !!!
+            for ($i=0, $j=10; $i < $this->picsOnPage; $i++, $j--){
+                $this->lastIdList[$i] = $j ;
+                }
         }
     }
 
-    public function getLastIdList(){  //не факт, что будет возвращать корректные значения
+    public function getLastIdList(): array {  //не факт, что будет возвращать корректные значения
         return $this->lastIdList;
     }
 
@@ -90,7 +101,7 @@ class PostRepository {
     //генерирует на лету, чтобы не хранить постоянно большой массив объектов в памяти
     public function getListOfPosts($pageNumber): array {
         $this->pageNumber = $pageNumber;
-        $this->createListOfPosts($this->pageNumber);
+        $this->createListOfPosts($pageNumber);
         return $this->listOfPosts;
     }
 }

@@ -13,17 +13,16 @@ private $postRepo;
 private $galleryPage; // [post id => post object]
 
     public function actionRecent($arg){
-        global $pageNumber;
-        global $postRepo;
         global $galleryPage;
+        $this->pageNumber = $arg;                       //save current page number for 'back' function from 'post' page
 
         if ($arg === 1)                                 //for first call creates new PostRepository - 'postRepo'
-            $postRepo = new PostRepository();
+            $this->postRepo = new PostRepository();
 
         //if ($postRepo)                     //after call need to make sure that postRepo is exist. or don't
-        $galleryPage = $postRepo->getListOfPosts($arg);      //than get list of posts for the page
+        $galleryPage = $this->postRepo->getListOfPosts($arg);      //than get list of posts for the page
 
-        $pageNumber = $arg;                       //save current page number for 'back' function from 'post' page
+
 
         try {
             View::render('gallery', $this->galleryPage);

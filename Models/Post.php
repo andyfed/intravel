@@ -49,20 +49,34 @@ class Post {
         global $postDesc;
         global $commentCount;
 
-        //PDO
+        //PDO! отрефакторить, можно укоротить, сделать обертку для PDO
         $pdo = new \PDO($this->dsn, 'root','root');
-        $sql_authorId = 'SELECT user_id FROM Posts WHERE id = :postId LIMIT 1';
-        $sql_postDate = 'SELECT date_time FROM Posts WHERE id = :postId LIMIT 1';
-        $sql_picLink = 'SELECT pic_link FROM Posts WHERE id = :postId LIMIT 1';
-        $sql_postDesc = 'SELECT text FROM Posts WHERE id = :postId LIMIT 1';
+        $sql_authorId = 'SELECT user_id FROM Posts WHERE post_id = ? LIMIT 1';
+        $sql_postDate = 'SELECT date_time FROM Posts WHERE post_id = ? LIMIT 1';
+        $sql_picLink = 'SELECT pic_link FROM Posts WHERE post_id = ? LIMIT 1';
+        $sql_postDesc = 'SELECT text FROM Posts WHERE post_id = ? LIMIT 1';
+
         $query = $pdo->prepare($sql_authorId);
-        $authorId = $query->execute([':postId'=>$postId]);
+        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
+        $query->execute();
+        $authorId = $query->fetchColumn();
+
         $query = $pdo->prepare($sql_postDate);
-        $postDate = $query->execute([':postId'=>$postId]);
+        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
+        $query->execute();
+        $postDate = $query->fetchColumn();
+
         $query = $pdo->prepare($sql_picLink);
-        $picLink = $query->execute([':postId'=>$postId]);
+        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
+        $query->execute();
+        $picLink = $query->fetchColumn();
+
         $query = $pdo->prepare($sql_postDesc);
-        $postDesc = $query->execute([':postId'=>$postId]);
+        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
+        $query->execute();
+        $postDesc = $query->fetchColumn();
+
+
         $this->createPreviewLink();
         $picLinkMin = $this->getMini();
         $commentCount = $this->getCommentCount();
