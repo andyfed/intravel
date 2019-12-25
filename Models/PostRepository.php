@@ -1,7 +1,8 @@
 <?php
 
 namespace Models;
-use DB\DBconn;
+//use DB\DBconn;
+use DB\DB;
 /* Объект класса postRepository создается относительно фиксированного времени первичного запроса
  * переход на следующую страницу галереи не учитывает записи, добавленные после времени
  * первичного запроса. Возврат на 1-ю страницу обновит время первичного запроса.
@@ -9,24 +10,21 @@ use DB\DBconn;
  */
 
 class PostRepository {
-    private $listOfPosts;      //массив постов, главное возвращаемое значение //function getListOfPosts($pageNumber)
+    private $listOfPosts;           //массив постов, главное возвращаемое значение //function getListOfPosts($pageNumber)
 
     private $currentMoment;         //первичное время запроса
     private $lastId = 0;            //int определяется динамически
-    private $lastIdList;       //int[] определяется динамически, зависит от $lastId
+    private $lastIdList;            //int[] определяется динамически, зависит от $lastId
 
     private $pageNumber = 1;        // нужен/ позже приходит в параметре запроса
     private $picsOnPage = 10;       //количество изображений на 1 странице
 
-    public $dsn = "mysql:host=localhost;dbname=DB1";
-
-    //сделать метод-генератор ссылок миниатюры из
+    //public $dsn = "mysql:host=localhost;dbname=DB1";
 
     public function createRepo(){
         $this->setCurrentMoment();
         $this->getAbsLastId();
         $this->createLastIdList();
-        //$this->createListOfPosts(1);
     }
 
     function __construct() {
@@ -40,7 +38,8 @@ class PostRepository {
 
     //берем крайний postId в таблице на время первичного запроса
     private function getAbsLastId(): void {
-        $pdo = new \PDO($this->dsn,'root','root');
+        //$pdo = new \PDO($this->dsn,'root','root');
+        $pdo = DB::instance();
         $sql = 'SELECT MAX(post_id) FROM Posts';
         $query = $pdo->prepare($sql);
         $query->execute();
@@ -55,7 +54,8 @@ class PostRepository {
             $this->lastId = $this->lastIdList[sizeof($this->lastIdList)-1]; // для 2-й страницы и следующих - переопределяем $lastId (берем из существующего списка)
 
             //получает массив последних postId меньших чем текущий $lastId ()
-            $pdo = new \PDO($this->dsn,'root','root');
+            //$pdo = new \PDO($this->dsn,'root','root');
+            $pdo = DB::instance();
             $sql ='SELECT post_id FROM Posts WHERE post_id < ? ORDER BY post_id DESC LIMIT ?';
             $query = $pdo->prepare($sql);
             //$query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
@@ -64,23 +64,28 @@ class PostRepository {
             $query->execute();
             $this->lastIdList = $query->fetchAll(\PDO::FETCH_NUM);
             //деструктор PDO сам закрывает соединение
-        } else {
+
+        } else {            //заполнение списка последних 20-ти id постов начиная с $lastId (включительно)
             //$this->lastId = intval($this->lastId);
             //$this->picsOnPage = intval($this->picsOnPage);
-            //заполнение списка последних 20-ти id постов начиная с $lastId (включительно)
-            $pdo = new \PDO($this->dsn,'root','root');
+
+
+            //$pdo = new \PDO($this->dsn,'root','root');
+            $pdo = DB::instance();
             $sql ='SELECT post_id FROM Posts WHERE post_id <= ? ORDER BY post_id DESC LIMIT ?';
             $query = $pdo->prepare($sql);
             $query->bindValue(1, $this->lastId, \PDO::PARAM_INT);
             $query->bindValue(2, $this->picsOnPage, \PDO::PARAM_INT);
             //$query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
-            $this->lastIdList = $query->fetchAll(\PDO::FETCH_COLUMN);// ПРИХОДИТ FALSE !!!
+            $this->lastIdList = $query->fetchAll(\PDO::FETCH_NUM);// ПРИХОДИТ FALSE или [0]!!!
             //деструктор PDO сам закрывает соединение
 
+            /*
             //TEST. Delete in prod !!!
             for ($i=0, $j=10; $i < $this->picsOnPage; $i++, $j--){
                 $this->lastIdList[$i] = $j ;
                 }
+            */
         }
     }
 
@@ -93,7 +98,7 @@ class PostRepository {
 
         for ($i = ($pageNumber-1)* $this->picsOnPage +1; $i <= $pageNumber*$this->picsOnPage; $i++) {
             // помещаем в ассоциативный массив объекты класса Post созданные по id из списка последних
-            $this->listOfPosts[$this->lastIdList[$i]] = new Post($this->lastIdList[$i]);
+            $this->listOfPosts[$this->lastIdList[$i]] = new Post($this->lastIdList[$i]);  //
         }
     }
 

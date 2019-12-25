@@ -20,9 +20,7 @@ private $galleryPage; // [post id => post object]
             $this->postRepo = new PostRepository();
 
         //if ($postRepo)                     //after call need to make sure that postRepo is exist. or don't
-        $galleryPage = $this->postRepo->getListOfPosts($arg);      //than get list of posts for the page
-
-
+        $galleryPage = $this->postRepo->getListOfPosts($arg);      //then get list of posts for the page
 
         try {
             View::render('gallery', $this->galleryPage);

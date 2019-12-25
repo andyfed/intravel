@@ -1,7 +1,7 @@
 <?php
 
 namespace Models;
-use DB;
+use DB\DB;
 
 /* 1 current post essence:
  * Creates once. Constant.
@@ -15,18 +15,18 @@ class Post {
     private $picLinkMin;
     private $postDesc;
     private $commentCount = 0;
-    private $postEssence = [];      //needed for 'post' page
+    private $postEssence = [];      //needed for rendering 'post' page
 
     public $dsn = "mysql:host=localhost;dbname=DB1";
 
-    //return associative array of variables
+    //return associative array of this object variables
     function createPostEssence()
     {
         global $postEssence;
         $postEssence = array(
             'postId'=>$this->postId, 'authorId'=>$this->authorId, 'postDate'=>$this->postDate,
-            'picLink'=>$this->picLink, 'picLinkMin'=>$this->getMini(),
-            'postDesc'=>$this->postDesc, 'commentCount'=>$this->getCommentCount()
+            'picLink'=>$this->picLink, 'picLinkMin'=>$this->picLinkMin,
+            'postDesc'=>$this->postDesc, 'commentCount'=>$this->commentCount
             );
     }
 
@@ -37,24 +37,30 @@ class Post {
 
     //constructor
     public function __construct($postId) {
-        $this->createEssence($postId);
+        $this->createPostObject($postId);
+        $this->createPostEssence();
     }
 
-    function createEssence($postId){
-        $this->postId = $postId;
-        global $authorId;
-        global $postDate;
-        global $picLink;
-        global $picLinkMin;
-        global $postDesc;
-        global $commentCount;
+    function createPostObject($postId){
+        $this->postId = intval($postId);
+        $postId = intval($postId);
 
-        //PDO! отрефакторить, можно укоротить, сделать обертку для PDO
+        $sql_authorId = 'SELECT user_id FROM Posts WHERE post_id = :post_id LIMIT 1';
+        $sql_postDate = 'SELECT date_time FROM Posts WHERE post_id = :post_id LIMIT 1';
+        $sql_picLink = 'SELECT pic_link FROM Posts WHERE post_id = :post_id LIMIT 1';
+        $sql_postDesc = 'SELECT text FROM Posts WHERE post_id = :post_id LIMIT 1';
+
+        $this->authorId = DB::run($sql_authorId,[':post_id'=>$postId])->fetchColumn();
+        $this->postDate = DB::run($sql_postDate,[':post_id'=>$postId])->fetchColumn();
+        $this->picLink = DB::run($sql_picLink,[':post_id'=>$postId])->fetchColumn();
+        $this->postDesc = DB::run($sql_postDesc,[':post_id'=>$postId])->fetchColumn();
+
+        $this->createPreviewLink();
+        $this->picLinkMin = $this->getMini();
+        $this->commentCount = $this->getCommentCount($postId);
+
+        /* old version
         $pdo = new \PDO($this->dsn, 'root','root');
-        $sql_authorId = 'SELECT user_id FROM Posts WHERE post_id = ? LIMIT 1';
-        $sql_postDate = 'SELECT date_time FROM Posts WHERE post_id = ? LIMIT 1';
-        $sql_picLink = 'SELECT pic_link FROM Posts WHERE post_id = ? LIMIT 1';
-        $sql_postDesc = 'SELECT text FROM Posts WHERE post_id = ? LIMIT 1';
 
         $query = $pdo->prepare($sql_authorId);
         $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
@@ -75,16 +81,12 @@ class Post {
         $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
         $query->execute();
         $postDesc = $query->fetchColumn();
-
-
-        $this->createPreviewLink();
-        $picLinkMin = $this->getMini();
-        $commentCount = $this->getCommentCount();
+        */
     }
 
     // метод создает ссылку на миниатюру изображения
     function createPreviewLink(): void {
-        $this->picLinkMin = str_replace("400", "200", $this->picLink);
+        $this->picLinkMin = str_replace("/400", "/200", $this->picLink);
     }
 
     //метод возвращает ссылку на миниатюру изображения
@@ -93,16 +95,17 @@ class Post {
     }
 
     // метод считает и возвращает количество комментов
-    function getCommentCount(): int {
-        $pdo = new \PDO($this->dsn,'root','root');
+    function getCommentCount($postId): int {
+        $postId = intval($postId);
         $sql = 'SELECT COUNT(com_id) FROM Comments WHERE post_id = :postId';
-        $query = $pdo->prepare($sql);
-        return $query->execute([':postId'=>$this->postId]);
+        return intval(DB::run($sql,[':postId'=>$postId]));
     }
 
     //return URI of the post
     public function getPostIdLink(): string {
-        global $postId;
-        return 'post/'.$postId.'.php';
+        $host = $_SERVER['HTTP_HOST'];
+        $protocol = $_SERVER['REQUEST_SCHEME'];
+
+        return ''.$protocol.'://'.$host.'/recent/post/'.$this->postId.'.php';
     }
 }
