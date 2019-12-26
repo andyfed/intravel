@@ -2,24 +2,27 @@
 
 namespace System;
 
-
 class View
 {
-    public $data;
+    public static $data;
+    public $keys = [];
+    public $values = [];
 
     public static function render(string $path, array $data){
-
+        self::$data = $data;
         $fullPath = __DIR__.'/../Views/'.$path.'.php';
 
         if (!file_exists(($fullPath)))
             throw new \ErrorException('View '.$path.' cannot be found!');
 
+
         if (!empty($data)) {
             foreach ($data as $key => $value) {
-                $$key = $key;
-                $$value = $value;
+                $keys[] = $key;
+                $values[] = $value;
             }
         }
+
 
         //show view to user
         include_once ''.$fullPath.'';

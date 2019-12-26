@@ -94,11 +94,12 @@ class Post {
         return $this->picLinkMin;
     }
 
-    // метод считает и возвращает количество комментов
+    // метод считает и возвращает количество комментов/ сейчас возвращает PDO statement!!!
     function getCommentCount($postId): int {
         $postId = intval($postId);
         $sql = 'SELECT COUNT(com_id) FROM Comments WHERE post_id = :postId';
-        return intval(DB::run($sql,[':postId'=>$postId]));
+        $count = DB::run($sql,[':postId'=>$postId])->fetchColumn();
+        return intval($count);
     }
 
     //return URI of the post
@@ -106,6 +107,6 @@ class Post {
         $host = $_SERVER['HTTP_HOST'];
         $protocol = $_SERVER['REQUEST_SCHEME'];
 
-        return ''.$protocol.'://'.$host.'/recent/post/'.$this->postId.'.php';
+        return ''.$protocol.'://'.$host.'/gallery/post/'.$this->postId.'';
     }
 }
