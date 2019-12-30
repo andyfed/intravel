@@ -9,21 +9,28 @@ use DB\DB;
 class Post {
     private $postId;
     private $authorId;
-    private $postDate;  //stores in sec UNIXtime - need to convert when show to user date('Y-m-d ')
-                        //echo date('j.m.Y H:i:s', strtotime($postDate)) for 'Post' page;
+    private $postDate;  //stores in sec UNIX time
     private $picLink;
     private $picLinkMin;
     private $postDesc;
     private $commentCount = 0;
-    private $postEssence = [];      //needed for rendering 'post' page
+    private $postEssence;      //needed for rendering 'post' page
+
+
+    // ДОДЕЛАТЬ метод для получения свойств
+    public function __get($name)
+    {
+        // проверка property_exist()
+    }
+
+    //пример!! убрать потом
+    $post->postId // так позже обращаться к свойствам
 
     public $dsn = "mysql:host=localhost;dbname=DB1";
 
     //return associative array of this object variables
-    function createPostEssence()
-    {
-        global $postEssence;
-        $postEssence = array(
+    function createPostEssence() {
+        $this->postEssence = array(
             'postId'=>$this->postId, 'authorId'=>$this->authorId, 'postDate'=>$this->postDate,
             'picLink'=>$this->picLink, 'picLinkMin'=>$this->picLinkMin,
             'postDesc'=>$this->postDesc, 'commentCount'=>$this->commentCount
@@ -32,7 +39,12 @@ class Post {
 
     //return array with all class values
     public function getPost(): array {
-        return $this->postEssence;
+        if ($this->postEssence)
+            return $this->postEssence;
+        else {
+            $this->createPostEssence();
+            return $this->postEssence;
+        }
     }
 
     //constructor
@@ -58,30 +70,6 @@ class Post {
         $this->createPreviewLink();
         $this->picLinkMin = $this->getMini();
         $this->commentCount = $this->getCommentCount($postId);
-
-        /* old version
-        $pdo = new \PDO($this->dsn, 'root','root');
-
-        $query = $pdo->prepare($sql_authorId);
-        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
-        $query->execute();
-        $authorId = $query->fetchColumn();
-
-        $query = $pdo->prepare($sql_postDate);
-        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
-        $query->execute();
-        $postDate = $query->fetchColumn();
-
-        $query = $pdo->prepare($sql_picLink);
-        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
-        $query->execute();
-        $picLink = $query->fetchColumn();
-
-        $query = $pdo->prepare($sql_postDesc);
-        $query->bindValue(1, $this->postId, \PDO::PARAM_INT);
-        $query->execute();
-        $postDesc = $query->fetchColumn();
-        */
     }
 
     // метод создает ссылку на миниатюру изображения

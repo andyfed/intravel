@@ -48,7 +48,15 @@ INSERT INTO `Posts` (`post_id`, `date_time`, `text`, `pic_link`, `user_id`) VALU
 (7,	1576571754,	NULL,	'https://picsum.photos/id/1018/400',	3),
 (8,	1576571757,	NULL,	'https://picsum.photos/id/1020/400',	2),
 (9,	1576571790,	NULL,	'https://picsum.photos/id/1036/400',	3),
-(10,	1576571832,	NULL,	'https://picsum.photos/id/1039/400',	2);
+(10,	1576571832,	NULL,	'https://picsum.photos/id/1039/400',	2),
+(11,	1576571657,	NULL,	'https://picsum.photos/id/103/400',	2),
+(12,	1576571687,	NULL,	'https://picsum.photos/id/1035/400',	3),
+(13,	1576571695,	NULL,	'https://picsum.photos/id/1037/400',	2),
+(14,	1576571701,	NULL,	'https://picsum.photos/id/1043/400',	2),
+(15,	1576571754,	NULL,	'https://picsum.photos/id/1050/400',	3),
+(16,	1576571757,	NULL,	'https://picsum.photos/id/1051/400',	2),
+(17,	1576571790,	NULL,	'https://picsum.photos/id/1061/400',	3),
+(18,	1576571832,	NULL,	'https://picsum.photos/id/11/400',	2);
 
 #create test comments
 INSERT INTO `Comments` (`com_id`, `post_id`, `user_id`, `text`, `date_time`) VALUES

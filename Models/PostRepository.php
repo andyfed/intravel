@@ -2,6 +2,7 @@
 
 namespace Models;
 use DB\DB;
+use PDO;
 /*
  * Объект класса postRepository создается относительно фиксированного времени первичного запроса
  * переход на следующую страницу галереи не учитывает записи, добавленные после времени
@@ -17,7 +18,7 @@ class PostRepository {
     private $lastIdList = [];       //int[] определяется динамически, зависит от $lastId
 
     private $pageNumber = 1;        // нужен/ позже приходит в параметре запроса
-    private $picsOnPage = 10;       //количество изображений на 1 странице
+    private $picsOnPage = 18;       //количество изображений на 1 странице
 
     public function createRepo(){
         $this->setCurrentMoment();
@@ -41,7 +42,7 @@ class PostRepository {
         $sql = 'SELECT MAX(post_id) FROM Posts';
         $query = $pdo->prepare($sql);
         $query->execute();
-        $lastId = $query->fetch(\PDO::FETCH_NUM);
+        $lastId = $query->fetch(PDO::FETCH_NUM);
         $this->lastId = (int)intval($lastId[0]);
     }
 
@@ -56,8 +57,8 @@ class PostRepository {
             $sql ='SELECT post_id FROM Posts WHERE post_id < ? ORDER BY post_id DESC LIMIT ?';
             $query = $pdo->prepare($sql);
             //$query->execute([':lastId'=>$this->lastId, ':picsOnPage'=>$this->picsOnPage]);
-            $query->bindValue(1, $this->lastId, \PDO::PARAM_INT);
-            $query->bindValue(2, $this->picsOnPage, \PDO::PARAM_INT);
+            $query->bindValue(1, $this->lastId, PDO::PARAM_INT);
+            $query->bindValue(2, $this->picsOnPage, PDO::PARAM_INT);
             $query->execute();
             while ($row = $query->fetch()) {
                 if ($row!=false)
@@ -70,8 +71,8 @@ class PostRepository {
             $pdo = DB::instance();
             $sql ='SELECT post_id FROM Posts WHERE post_id <= ? ORDER BY post_id DESC LIMIT ?';
             $query = $pdo->prepare($sql);
-            $query->bindValue(1, $this->lastId, \PDO::PARAM_INT);
-            $query->bindValue(2, $this->picsOnPage, \PDO::PARAM_INT);
+            $query->bindValue(1, $this->lastId, PDO::PARAM_INT);
+            $query->bindValue(2, $this->picsOnPage, PDO::PARAM_INT);
             $query->execute();
             while ($row = $query->fetch()) {
                 if ($row!=false)
@@ -88,7 +89,8 @@ class PostRepository {
     //заполняет массив значениями по мере запроса следующих страниц
     private function createListOfPosts($pageNumber) {
 
-        for ($i = ($pageNumber-1)* $this->picsOnPage +1; $i < $pageNumber*$this->picsOnPage+1; $i++) {  //i={1..10}
+        //for ($i = ($pageNumber-1)* $this->picsOnPage +1; $i < $pageNumber*$this->picsOnPage+1; $i++) {  //i={1..18}
+        for ($i = 1; $i < $this->picsOnPage+1; $i++) {  //i={1..18}
             // помещаем в ассоциативный массив объекты класса Post созданные по id из списка последних
             $this->listOfPosts[$this->lastIdList[$i-1]] = new Post($this->lastIdList[$i-1]);  //
         }

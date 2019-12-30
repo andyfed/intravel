@@ -1,6 +1,9 @@
 <!-- подключаем хедер -->
 <?php include_once "header.php" ?>
-
+<?php use System\View;
+use Controllers\galleryController;
+$post = View::$data;
+?>
     <div class="container">
 
         <!-- общая строка -->
@@ -13,52 +16,48 @@
                 <!-- заголовок левого блока -->
                 <div class="row bg-dark ">
                     <div class="mx-auto p-3 text-white">
-                        Recent comments...
+                        Recent comments: <?php echo $post->commentCount?> //ПЕРЕДЕЛАТЬ все свойства
                     </div>
                 </div>
 
                 <!-- основное содержание левого блока -->
                 <div class="row">
                     <div class="col border border-dark">
+                        <!-- СДЕЛАТЬ скролл контейнера -->
                         <div class="mx-auto bg-white shadow-lg">
+
+                            <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
+                                <div class="p-1" style="text-align: right; font-size: 80%">21 Dec 2019 08:36 'User1':</div>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis commodo risus ac pulvinar lobortis. Aliquam id urna ac sem scelerisque feugiat vel et ex. Suspendisse tristique faucibus diam et posuere.
+                            </div>
+                            <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
+                                <div class="p-1" style="text-align: right; font-size: 80%">22 Dec 2019 08:36 'User2':</div>
+                            Nunc dignissim eu nibh vitae mattis. Praesent eget viverra metus, quis sagittis risus.
+                            </div>
+
+                            <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
+                                <div class="p-1" style="text-align: right; font-size: 80%">22 Dec 2019 11:36 'User3':</div>
+                            Etiam leo lacus, malesuada in nunc feugiat, pulvinar vulputate magna. Nunc at tellus rutrum, luctus ipsum quis, eleifend dolor.
+                            </div>
                             <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            Comment field
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
+                            <div style="color: dimgrey; font-size: 70%; text-align: center" > This is comment examples only!</div>
                             <br>
                             <br>
                         </div>
                     </div>
                 </div>
 
+
                 <!-- Back button -->
                 <div class="row" style="margin-top: 10px" >
                     <div class="col">
 
-                        <!-- вставить сюда переменные из контроллера, страница галлереи, с которой был переход -->
-                        <a href="recent#<?php $postRepository ?>.php"><button type="button" class="btn btn-dark">Back to gallery</button></a>
+                        <!-- ДОДЕЛАТЬ ! вставить сюда переменные из контроллера, страница галлереи, с которой был переход -->
+                        <a href="../../<?php //$_SERVER[''] ?>"><button type="button" class="btn btn-dark btn-lg"><| Back to the gallery</button></a>
                     </div>
                 </div>
                 <!-- Back button -->
+
 
             </div>
 
@@ -68,8 +67,11 @@
 
                     <!-- заголовок правого блока -->
                     <div class="mx-auto p-3 text-white" >
-                        <!-- вставить сюда переменные из контроллера -->
-                        AUTHOR NAME, AVATAR, ID
+
+                        <!-- вставить сюда переменные !  -->
+                        AUTHOR NAME, AVATAR,
+                        <br>
+                        <div style="color: dimgrey; text-align: right; font-size: 80%"> user id #<?php echo $post['authorId']?></div>
                     </div>
                 </div>
 
@@ -80,9 +82,9 @@
 
                         <!-- строка1 -->
                         <div class="row ">
-                            <div class="mx-auto mt-2" style="color: dimgrey">
+                            <div class="mx-auto mt-4" style="color: dimgrey; text-align: right; font-size: 80%">
                                 <!-- вставить сюда переменные из контроллера -->
-                                POST DATE, TIME, ID
+                                <?php echo date('j M Y H:i', gmdate($post['postDate']))?>
                             </div>
                         </div>
 
@@ -91,12 +93,10 @@
 
                             <!-- место для фоточки -->
                             <div class="mx-auto">
-
                                     <!-- контейнер изображения -->
                                     <div>
-                                        <img src="https://picsum.photos/id/1016/400" alt="picture1" class="p-4 img-thumbnail rounded mx-auto d-block" style="margin: 20px; background-color: #DBDBDB">
+                                        <img src="<?php echo $post['picLink']?>" alt="picture" class="p-4 img-thumbnail rounded mx-auto d-block" style="margin: 20px; background-color: #DBDBDB">
                                     </div>
-
                             </div>
                         </div>
 
@@ -105,12 +105,18 @@
 
                             <!-- блок описания поста -->
                             <div class="d-flex p-2 mx-auto ">
-                                <div class="p-2 pl-2 pr-2 text-wrap rounded" style="width: 25rem; background-color: #DBDBDB; color: dimgrey">
+                                <div class="p-2 pl-2 pr-2 text-wrap rounded" style="width: 25rem; background-color: #DBDBDB; color: dimgrey; text-align: center;">
                                     <!-- вставить сюда переменные из контроллера -->
-                                POST DESCRIPTION (TEXT)
+                                    <?php
+                                    if ($post['postDesc']!==null)
+                                        echo $post['postDesc'];
+                                    else
+                                        echo 'No description to this post:('
+                                    ?>
                                 </div>
                             </div>
                         </div>
+                        <div style="color: dimgrey; text-align: right; font-size: 80%"> post id #<?php echo $post['postId']?></div>
 
                     </div>
 

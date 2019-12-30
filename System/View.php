@@ -15,7 +15,7 @@ class View
         if (!file_exists(($fullPath)))
             throw new \ErrorException('View '.$path.' cannot be found!');
 
-
+        // убрать?
         if (!empty($data)) {
             foreach ($data as $key => $value) {
                 $keys[] = $key;

@@ -1,5 +1,5 @@
 <?php include_once "header.php";
-use Models\Post;
+//use Models\Post;
 use System\View;
 
 ?>
@@ -8,11 +8,10 @@ use System\View;
 
     <?php foreach (View::$data as $item) { ?>
 
-        <!-- блоки картинок по 5 в ряд -->
-        <div class="col-2 p-5">
+        <!-- блоки картинок по 6 в ряд -->
+        <div class="col-2 p-3">
             <a href="<?php echo $item->getPostIdLink(); ?>"><img src="<?php echo $item->getMini(); ?>" alt="picture" class="img-thumbnail rounded mx-auto d-block"></a>
         </div>
-
 
     <?php } ?>
 
