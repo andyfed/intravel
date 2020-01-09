@@ -12,9 +12,48 @@
   </head>
   <body>
   <div class="container-fluid">
-      <div class="row bg-dark">
-          <div class="col-12 " style="color: aliceblue; margin: 10px">
+      <div class="row bg-dark p-2">
+
+          <div class="col-sm-1 " style="color: aliceblue">
               <b>InTravel</b>
           </div>
+
+          <div class="col-sm-1" >
+              <b><a href="http://test.com/" style="color: aliceblue; ;">Recent</a></b>
+          </div>
+
+          <div class="col-sm-1" >
+              block 3
+          </div>
+          <div class="col-sm-1" >
+              block 4
+          </div>
+          <div class="col-sm-1" >
+              block 5
+          </div>
+          <div class="col-sm-1" >
+              block 6
+          </div>
+          <div class="col-sm-1" >
+              block 7
+          </div>
+          <div class="col-sm-1" >
+              block 8
+          </div>
+          <div class="col-sm-1" >
+              block 9
+          </div>
+          <div class="col-sm-1" >
+              block 10
+          </div>
+
+          <div class="col-sm-1">
+              block 11
+          </div>
+
+          <div class="col-sm-1" style="color: aliceblue; ">
+              <a href="http://test.com/user/enter">Log in</a>
+          </div>
+
       </div>
   </div>

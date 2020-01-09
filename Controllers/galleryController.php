@@ -1,49 +1,39 @@
 <?php
-namespace Controllers;
 
-use Models\Post;
+
+namespace Controllers;
+use Models\galleryPage;
 use Models\PostRepository;
 use System\View;
 
 class galleryController
 {
-
-private $pageNumber; //NEEDED! use than push 'BACK' button in 'post/id' page
-private $postID;
-private Repository $postRepo;
-private $galleryPage; // [post id => post object]
-private $post;
-
-    // gallery/recent/page
+    // for http://domain/gallery/recent(pageNumber) or http://domain/
     public function actionRecent($arg){
-        $this->pageNumber = intval($arg);                       //save current page number for 'back' function from 'post' page
-
-        //if (intval($arg) === 1)                                 //for first call creates new PostRepository - 'postRepo'
-             $this->postRepo = new PostRepository();
-
-        //if ($postRepo)                     //after call need to make sure that postRepo is exist. or don't
-        $this->galleryPage = $this->postRepo->getListOfPosts(intval($arg));      //then get list of posts for the page
-
+        $galleryPage = new galleryPage($arg);
+        $galleryPage = $galleryPage->getPage();
         try {
-            View::render('gallery', $this->galleryPage);
+            View::render("gallery", $galleryPage);
         } catch (\ErrorException $e) {
-            echo 'Render \'gallery/recent\' page error';
+            echo 'Render \'gallery/recent\' page error: '.$e;
         }
     }
 
-
-    // gallery/post/id
+    //for http://domain/gallery/post/postId
     public function actionPost($arg){
-        $this->postID = $arg;
-        $post = new Post($arg);
-        $post = $post->getPost(); // associative array of Post variables
+        $post = new PostRepository();
+        $post = $post->getById($arg);       //new object post
+        $posts[0] = $post;
 
         try {
-        View::render('post', $post);
+            View::render('post', $posts);
         } catch (\ErrorException $e) {
-            echo 'Render \'gallery/post\' page error';
+            echo 'Render \'gallery/post\' page error: ' . $e;
         }
+
     }
+
+
 
     //
     //make that functions later
@@ -53,5 +43,4 @@ private $post;
     public function actionFavorites($arg){
         $this->pageNumber = $arg;
     }
-
 }

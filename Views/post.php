@@ -1,8 +1,9 @@
 <!-- подключаем хедер -->
 <?php include_once "header.php" ?>
-<?php use System\View;
+<?php use System\View, Models\Comment;
 use Controllers\galleryController;
-$post = View::$data;
+$post = View::$data[0];     //object
+//var_dump($post);
 ?>
     <div class="container">
 
@@ -16,7 +17,7 @@ $post = View::$data;
                 <!-- заголовок левого блока -->
                 <div class="row bg-dark ">
                     <div class="mx-auto p-3 text-white">
-                        Recent comments: <?php echo $post->commentCount?> //ПЕРЕДЕЛАТЬ все свойства
+                        <?php echo Comment::countComments($post->post_id);?> comments:
                     </div>
                 </div>
 
@@ -28,15 +29,18 @@ $post = View::$data;
 
                             <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
                                 <div class="p-1" style="text-align: right; font-size: 80%">21 Dec 2019 08:36 'User1':</div>
+                                [тестовый комментарий]
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis commodo risus ac pulvinar lobortis. Aliquam id urna ac sem scelerisque feugiat vel et ex. Suspendisse tristique faucibus diam et posuere.
                             </div>
                             <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
                                 <div class="p-1" style="text-align: right; font-size: 80%">22 Dec 2019 08:36 'User2':</div>
+                                [тестовый комментарий]
                             Nunc dignissim eu nibh vitae mattis. Praesent eget viverra metus, quis sagittis risus.
                             </div>
 
                             <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
                                 <div class="p-1" style="text-align: right; font-size: 80%">22 Dec 2019 11:36 'User3':</div>
+                                [тестовый комментарий]
                             Etiam leo lacus, malesuada in nunc feugiat, pulvinar vulputate magna. Nunc at tellus rutrum, luctus ipsum quis, eleifend dolor.
                             </div>
                             <br>
@@ -71,7 +75,7 @@ $post = View::$data;
                         <!-- вставить сюда переменные !  -->
                         AUTHOR NAME, AVATAR,
                         <br>
-                        <div style="color: dimgrey; text-align: right; font-size: 80%"> user id #<?php echo $post['authorId']?></div>
+                        <div style="color: dimgrey; text-align: right; font-size: 80%"> user id #<?php echo $post->user_id;?></div>
                     </div>
                 </div>
 
@@ -84,7 +88,7 @@ $post = View::$data;
                         <div class="row ">
                             <div class="mx-auto mt-4" style="color: dimgrey; text-align: right; font-size: 80%">
                                 <!-- вставить сюда переменные из контроллера -->
-                                <?php echo date('j M Y H:i', gmdate($post['postDate']))?>
+                                <?php echo date('j M Y H:i', gmdate($post->date_time));?>
                             </div>
                         </div>
 
@@ -95,7 +99,7 @@ $post = View::$data;
                             <div class="mx-auto">
                                     <!-- контейнер изображения -->
                                     <div>
-                                        <img src="<?php echo $post['picLink']?>" alt="picture" class="p-4 img-thumbnail rounded mx-auto d-block" style="margin: 20px; background-color: #DBDBDB">
+                                        <img src="<?php echo $post->pic_link?>" alt="picture" class="p-4 img-thumbnail rounded mx-auto d-block" style="margin: 20px; background-color: #DBDBDB">
                                     </div>
                             </div>
                         </div>
@@ -108,15 +112,15 @@ $post = View::$data;
                                 <div class="p-2 pl-2 pr-2 text-wrap rounded" style="width: 25rem; background-color: #DBDBDB; color: dimgrey; text-align: center;">
                                     <!-- вставить сюда переменные из контроллера -->
                                     <?php
-                                    if ($post['postDesc']!==null)
-                                        echo $post['postDesc'];
+                                    if ($post->text!==null)
+                                        echo $post->text;
                                     else
                                         echo 'No description to this post:('
                                     ?>
                                 </div>
                             </div>
                         </div>
-                        <div style="color: dimgrey; text-align: right; font-size: 80%"> post id #<?php echo $post['postId']?></div>
+                        <div style="color: dimgrey; text-align: right; font-size: 80%"> post id #<?php echo $post->post_id?></div>
 
                     </div>
 

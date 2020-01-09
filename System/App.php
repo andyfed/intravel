@@ -22,7 +22,9 @@ class App {
         if ($pathParts[1]!=null) {
             $controller = $pathParts[1];
             $action = $pathParts[2];
-            $arg = $pathParts[3];
+            if ($pathParts[3]!=null) {
+                $arg = $pathParts[3];
+            } else $pathParts[3]=1;
         } else {
             $controller = 'gallery';
             $action = 'recent';
