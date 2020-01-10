@@ -1,6 +1,6 @@
 <!-- подключаем хедер -->
 <?php include_once "header.php" ?>
-<?php use System\View, Models\Comment;
+<?php use System\View, Models\Comment, Models\UserRepository;
 use Controllers\galleryController;
 $post = View::$data[0];     //object
 //var_dump($post);
@@ -70,12 +70,22 @@ $post = View::$data[0];     //object
                 <div class="row bg-dark text-white">
 
                     <!-- заголовок правого блока -->
-                    <div class="mx-auto p-3 text-white" >
+                    <div class="col-11 mt-1 text-white text-right" >
 
                         <!-- вставить сюда переменные !  -->
-                        AUTHOR NAME, AVATAR,
+                        <?php $user = UserRepository::getFace($post->user_id);
+                        echo $user['nickname'];?>
                         <br>
                         <div style="color: dimgrey; text-align: right; font-size: 80%"> user id #<?php echo $post->user_id;?></div>
+                    </div>
+                    <!-- avatar -->
+                    <div class="col-1 p-1">
+                        <img src="
+                        <?php $user = UserRepository::getFace($post->user_id);
+                        echo $user['userpic'];?>
+                        " alt="<userpic>" class="rounded-circle shadow float-right" style="max-height: 45px; align-content: flex-end">
+
+
                     </div>
                 </div>
 

@@ -14,45 +14,43 @@
   <div class="container-fluid">
       <div class="row bg-dark p-2">
 
-          <div class="col-sm-1 " style="color: aliceblue">
-              <b>InTravel</b>
+          <div class="col-sm-1 border border-light" style="color: aliceblue">
+              <div class="h5 text-center"><b>InTravel</b></div>
+          </div>
+
+          <div class="col-sm-1 text-center" >
+              <b><a href="http://test.com/" style="color: aliceblue;">Recent</a></b>
           </div>
 
           <div class="col-sm-1" >
-              <b><a href="http://test.com/" style="color: aliceblue; ;">Recent</a></b>
+
+          </div>
+          <div class="col-sm-1" >
+
+          </div>
+          <div class="col-sm-1" >
+
+          </div>
+          <div class="col-sm-1" >
+
+          </div>
+          <div class="col-sm-1" >
+
+          </div>
+          <div class="col-sm-1" >
+
+          </div>
+          <div class="col-sm-1" >
+
+          </div>
+          <div class="col-sm-1" >
+
           </div>
 
-          <div class="col-sm-1" >
-              block 3
-          </div>
-          <div class="col-sm-1" >
-              block 4
-          </div>
-          <div class="col-sm-1" >
-              block 5
-          </div>
-          <div class="col-sm-1" >
-              block 6
-          </div>
-          <div class="col-sm-1" >
-              block 7
-          </div>
-          <div class="col-sm-1" >
-              block 8
-          </div>
-          <div class="col-sm-1" >
-              block 9
-          </div>
-          <div class="col-sm-1" >
-              block 10
-          </div>
 
-          <div class="col-sm-1">
-              block 11
-          </div>
 
-          <div class="col-sm-1" style="color: aliceblue; ">
-              <a href="http://test.com/user/enter">Log in</a>
+          <div class="col-sm-2 dy-auto" style="text-align: right">
+              <a class="text-white font-weight-bold dy-auto" href="http://test.com/user/enter">Log in / Register</a>
           </div>
 
       </div>

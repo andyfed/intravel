@@ -1,7 +1,8 @@
 <?php
 
-
+namespace Controllers;
 use System\View;
+use Models\UserRepository;
 
 class userController
 {
@@ -10,9 +11,9 @@ class userController
         $data[0]=$arg;
 
         try {
-            View::render("gallery", $data);
+            View::render("enter", $data);
         } catch (\ErrorException $e) {
-            echo 'Render \'gallery/recent\' page error: '.$e;
+            echo 'Render \'user/enter\' page error: '.$e;
         }
 
     }

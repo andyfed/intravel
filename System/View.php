@@ -16,12 +16,14 @@ class View
             throw new \ErrorException('View '.$path.' cannot be found!');
 
         // убрать?
+        /*
         if (!empty($data)) {
             foreach ($data as $key => $value) {
                 $keys[] = $key;
                 $values[] = $value;
             }
         }
+        */
 
 
         //show view to user

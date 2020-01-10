@@ -36,11 +36,13 @@ class galleryController
 
 
     //
-    //make that functions later
+    //
     public function actionTop($arg){
         $this->pageNumber = $arg;
+        //TODO: make that functions later
     }
     public function actionFavorites($arg){
         $this->pageNumber = $arg;
+        //TODO: make that functions later
     }
 }
