@@ -1,5 +1,10 @@
 <!-- подключение хэдера -->
-<?php include_once "header.php"; ?>
+<?php include_once "header.php";
+ echo '$data$';
+ var_dump($data);
+ echo '$_SESSION';
+ var_dump($_SESSION);
+?>
 
 
 <div class="container-fluid">
@@ -19,34 +24,40 @@
                 <div class="card mt-4 bg-secondary">
                     <div class="card-body">
 
-                        <div class="row p-4 text-white"> Input information for register a new account:</div>
-
+                        <!-- top row with labels -->
+                        <div class="row p-4 text-white">
+                            <div class="col-6 p-4 text-center text-white">Input information to register a new account:</div>
+                            <div class="col-6 p-4 text-center text-white"> Input information enter in existing account:</div>
+                        </div>
                         <div class="row">
 
-                            <!-- LEFT column -->
+                            <!-- LEFT column - 'Register'-->
                             <div class="col">
 
-                                <!-- avatar -->
+                                <!-- userpic
                                 <div class="row p-2 mx-auto">
                                     <div class="col w-40 text-center font-weight-bold">
-                                        <img src="../Storage/AvatarPictures/user_icon_128.png" alt="userpic">
+                                        <img src="../Storage/UserPics/user_icon_128.png" alt="userpic">
                                     </div>
                                 </div>
+                                -->
 
-                                <!-- inputs -->
-                                <form name="register">
+                                <!-- INPUTS -->
+                                <form action="http://test.com/user/registration" method="post" name="registerForm" id="register">
 
+                                    <!-- Name, Surname -->
                                     <div class="form-row">
                                         <div class="col-md-6 mb-3">
                                             <label for="validationDefault01">Name</label>
-                                            <input type="text" class="form-control" id="validationDefault01" placeholder="Mark">
+                                            <input type="text" class="form-control" name="name" id="validationDefault01" placeholder="Mark">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="validationDefault02">Surname</label>
-                                            <input type="text" class="form-control" id="validationDefault02" placeholder="Otto">
+                                            <input type="text" class="form-control" name="surname" id="validationDefault02" placeholder="Otto">
                                         </div>
                                     </div>
 
+                                    <!-- Nickname -->
                                     <div class="form-row">
                                         <div class="col-md-6 mb-3">
                                             <label for="validationDefaultUsername">* Nickname</label>
@@ -54,32 +65,25 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroupPrepend2">@</span>
                                                 </div>
-                                                <input type="text" class="form-control" id="validationDefaultUsername" placeholder="Mark Otto" aria-describedby="inputGroupPrepend2" required>
+                                                <input type="text" class="form-control" name="nickname" id="validationDefaultUsername" placeholder="Mark Otto" aria-describedby="inputGroupPrepend2" required>
                                             </div>
                                         </div>
-
                                         <div class="col-md-6 mt-4 text-center">Values fill signed * is required!</div>
                                     </div>
 
+                                    <!-- Email / Password -->
                                     <div class="form-row">
-
-
-
                                             <div class="col-md-6 mb-3">
                                                 <label for="inputEmail2">* Email</label>
-                                                <input type="email" class="form-control" id="inputEmail2" placeholder="Email" required>
+                                                <input type="email" class="form-control" name="email" id="inputEmail2" placeholder="Email" required>
                                             </div>
-
-
                                             <div class="col-md-6 mb-3">
                                                 <label for="inputPassword2">* Password</label>
-                                                <input type="password" class="form-control" id="inputPassword2" placeholder="Password" required>
+                                                <input type="password" class="form-control" name="password" id="inputPassword2" placeholder="Password" required>
                                             </div>
-
-
-
                                     </div>
 
+                                    <!-- Terms agree checkbox -->
                                     <div class="form-group">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
@@ -96,22 +100,23 @@
                             <!-- END LEFT column -->
 
 
-                            <!-- RIGHT column 'ENTER'-->
+                            <!-- RIGHT column - 'ENTER'-->
                             <div class="col">
-                                <form name="login">
 
-                                    <!-- BEGIN inputs -->
+                                <!-- BEGIN inputs -->
+                                <form action="http://test.com/user/authorize" method="post" name="loginForm" id="login">
+
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-2 col-form-label text">Email</label>
                                         <div class="col-sm-10">
-                                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                            <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
                                         <div class="col-sm-10">
-                                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                            <input type="password" class="form-control" name="pass" id="inputPassword3" placeholder="Password">
                                         </div>
                                     </div>
 
@@ -126,27 +131,32 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- END inputs -->
                                 </form>
+                                <!-- END inputs -->
+
+                                <?php if ($data[0]===1){
+                                    echo "<div class=\"col-9 text-danger p-3 ml-5\"><b>Warning! Wrong login or password. Please, try again.</b><br><br>
+                                    To get help you need to send message from your registered email to admin@test.com</div>";
+                                }?>
 
                             </div>
                         <!-- END RIGHT column-->
+
                         </div>
                     </div>
-
                 </div>
-
-
-
             </div>
 
+            <!-- нижняя строка -->
             <div class="row p-3">
+
             <!-- кнопки -->
                 <div class="col-3 mx-auto">
-                    <button type="button" class="btn btn-dark btn-lg" form="register" formmethod="post">Register me</button>
+                    <button type="submit" class="btn btn-dark btn-lg" form="register" name="registerMeButton"><b>Register me</b></button>
                 </div>
+
                 <div class="col-3 mx-auto">
-                    <button type="button" class="btn btn-dark btn-lg" form="login" formmethod="post">Enter</button>
+                    <button type="submit" class="btn btn-dark btn-lg" form="login" name="enterButton"><b>Enter</b></button>
                 </div>
             </div>
         </div>

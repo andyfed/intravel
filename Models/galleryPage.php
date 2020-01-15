@@ -30,6 +30,10 @@ class galleryPage
     {
         $postIdList = $this->getPostIdList();
         $postRepository = new PostRepository();
-        return $postRepository->getByIds($postIdList);
+        $postsArray=  $postRepository->getByIds($postIdList);
+        foreach ($postsArray as $post)
+            $post->picLinkMin = picHandler::getMin($post->pic_link);
+
+        return $postsArray;
     }
 }

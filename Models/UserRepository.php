@@ -4,37 +4,59 @@
 namespace Models;
 
 
+use Controllers\userController;
 use DB\DB;
 
 class UserRepository implements Repository
 {
-    public function add($userId)
+    // for registration new user
+    public function add(array $data) // данные из глобального массива _POST
     {
-        // TODO: Implement add() method.
+        $query = 'INSERT INTO Users (nickname, name, surname, email, password)
+VALUES (:nickname, :name, :surname, :email, :password)';
+        DB::run($query, [":nickname"=> $data['nickname'], ":name"=>$data['name'], ":surname"=>$data['surname'], ":email"=>$data['email'], ":password"=>$data['password']]);
+
     }
 
+    // change existed user
     public function update($userId)
     {
+        // включить проверку типа учетной записи
         // TODO: Implement update() method.
     }
 
-    public function delete($userId)
+    // for enter to user account
+    public function enter()
     {
-        // TODO: Implement delete() method.
+        //получаем из _POST
+        // проверка на совпадение login / pass
+        $_POST[''];
     }
+
 
     // return object User
     public function getById($userId)
     {
         $query = 'SELECT * FROM Users WHERE user_id = :userId';
-        $user = DB::run($query, [':userId'=>intval($userId)])->fetchObject("User");
+        $user = DB::run($query, [':userId'=>intval($userId)])->fetchObject("Models\User");
         if ($user!=null) {
-            $user->password = null;
+            $a = new picHandler();
+            $user->userpic = $a->getUserpic($userId);
+            $user->password = null;     // delete password in public object
+            $user->email = null;        // delete email in public object
             return $user;
         } else
             echo 'No such user as #id: '.$userId.' !';
     }
 
+    public function checkEmailExistance($email): bool { // возможно нужно возвращаемое значени int
+
+        $query = 'SELECT COUNT(email) FROM Users WHERE email = :email';
+        $answer = DB::run($query, [':email'=>intval($email)]);
+        return (bool)$answer;
+    }
+
+    //unused method! for delete?
     public static function getFace($userId): array
     {
         $query1 = 'SELECT nickname FROM Users WHERE user_id = :userId';
@@ -49,10 +71,29 @@ class UserRepository implements Repository
         return $face;
     }
 
-    public function getByIds(array $userIdList)
+    public function getByIds(array $userIdList): array
     {
         // TODO: Implement getByIds() method.
     }
+
+    // for authorization
+    public function getByEmail(string $email)
+    {
+        $query = 'SELECT * FROM Users WHERE email = :email';
+        $user = DB::run($query, [':email'=>$email])->fetchObject("Models\User");
+        if (isset($user->user_id)) {
+            $user->userpic = (new picHandler())->getUserpic($user->user_id);
+            return $user;
+        } else{
+            (new userController())->actionEnter(1);     // load 'enter' page with error message
+        }
+
+    }
+
+
+    //// ADMIN SECTION ////
+
+    // дописать во все методы секции проверку на тип учетной записи
 
     // ban user on the site. For admin only!
     private function block($userId)
@@ -64,5 +105,11 @@ class UserRepository implements Repository
             DB::run($query, [':userId' => $userId]);
         }
         */
+    }
+
+    // delete user (wrong account) from database. For admin only!
+    public function delete($userId)
+    {
+        // TODO: Implement delete() method.
     }
 }

@@ -7,7 +7,8 @@ CREATE TABLE `Users` (
   `surname` varchar(30) NULL,
   `email` varchar(40) NOT NULL,
   `role` varchar(30) NOT NULL,
-  `password` varchar(30) NOT NULL
+  `password` varchar(30) NOT NULL,
+  UNIQUE (user_id)
 );
 
 CREATE TABLE `Posts` (
@@ -30,12 +31,17 @@ CREATE TABLE `Comments` (
 );
 
 #create test users
-INSERT INTO `Users` (`user_id`, `nickname`, `name`, `surname`, `email`, `role`, `password`) VALUES
-(1,	'Admin01',	'Alexey',	'Petrov',	'admin01@test.com',	'admin',	'root'),
-(2,	'Author01',	'Sergey',	'Kozlov',	'author01@test.com',	'author',	'root'),
-(3,	'author-02',	'Margarita',	'Orlova',	'author-02@test.com',	'author',	'root'),
-(4,	'reader_01',	'Mike',	NULL,	'reader_01@test.com',	'reader',	'root'),
-(5,	'Reader_02',	NULL,	'Fedorov',	'reader_02@test.com',	'reader',	'root');
+INSERT INTO `Users` (`user_id`, `nickname`, `name`, `surname`, `email`, `password`, `role`, `active`) VALUES
+(1,	'Admin01',	'Alexey',	'Petrov',	'admin01@test.com',	'root',	'admin',	1),
+(2,	'SerGo1',	'Sergey',	'Kozlov',	'author01@test.com',	'root',	'author',	1),
+(3,	'Margo92',	'Margarita',	'Orlova',	'author-02@test.com',	'root',	'author',	1),
+(4,	'reader_01',	'Mike',	NULL,	'reader_01@test.com',	'root',	'reader',	1),
+(5,	'Reader_02',	NULL,	'Fedorov',	'reader_02@test.com',	'root',	'reader',	1),
+(6,	'Cooler',	'Tom',	'Smith',	'cooler@mail.com',	'root',	'author',	1),
+(7,	'Mabel34',	'Mabel',	'Kovalsky',	'kovalsky@mail.com',	'root',	'author',	1),
+(8,	'Traveller',	'Orso',	'King',	'traveller@mail.com',	'root',	'author',	1),
+(9,	'blockedUser',	'mad',	'max',	'madmax@iii.rr',	'root',	'reader',	0);
+
 
 #create test posts
 INSERT INTO `Posts` (`post_id`, `date_time`, `text`, `pic_link`, `user_id`) VALUES

@@ -4,6 +4,7 @@
 namespace Controllers;
 use Models\galleryPage;
 use Models\PostRepository;
+use Models\UserRepository;
 use System\View;
 
 class galleryController
@@ -23,7 +24,10 @@ class galleryController
     public function actionPost($arg){
         $post = new PostRepository();
         $post = $post->getById($arg);       //new object post
+        $user = new UserRepository();
+        $user = $user->getById($post->user_id);
         $posts[0] = $post;
+        $posts[1] = $user;
 
         try {
             View::render('post', $posts);

@@ -47,11 +47,32 @@
 
           </div>
 
-
-
+          <!-- auth block-->
           <div class="col-sm-2 dy-auto" style="text-align: right">
-              <a class="text-white font-weight-bold dy-auto" href="http://test.com/user/enter">Log in / Register</a>
-          </div>
+            <?php
+            // no auth
+            if (!isset($_SESSION['AUTH'])) {
+                echo '    <a class="text-white font-weight-bold dy-auto" href="http://test.com/user/enter/0">Log in / Register</a>';
+
+            }
+            // authenticated
+            elseif ($_SESSION['AUTH']===1) {
+                echo '<row>';
+                //href to 'cabinet'
+                echo '<a href="http://test.com/user/cabinet">';
+                //login userpic
+                echo '<div >';
+                echo '<img src="'.$_SESSION['userpic'].'" alt="<userpic>" class="rounded-circle shadow float-right" 
+                        style="max-height: 30px; max-width:30px; align-content: flex-end">';
+                echo '</div>';
+                // login username
+                echo '<div style="color: darkgray; font-size: small; text-align: right; padding-right: 30px"><b>'.$_SESSION['nickname'].'</b></div>';
+                echo '<div style="color: darkgray; font-size: x-small; text-align: right; padding-right: 30px">'.$_SESSION['role'].'</div>';
+                echo '</a>';
+                echo '</row>';
+            }        ?>
+
+        </div>
 
       </div>
   </div>

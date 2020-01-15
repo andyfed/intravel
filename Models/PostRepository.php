@@ -6,7 +6,7 @@ use DB\DB;
 
 class PostRepository  implements Repository
 {
-    public function add($item)
+    public function add(array $data)
     {
         // TODO: Implement add() method.
     }

@@ -2,8 +2,9 @@
 <?php include_once "header.php" ?>
 <?php use System\View, Models\Comment, Models\UserRepository;
 use Controllers\galleryController;
-$post = View::$data[0];     //object
-//var_dump($post);
+$post = View::$data[0];     //object Post
+$user = View::$data[1];     //object User
+//var_dump($data);
 ?>
     <div class="container">
 
@@ -32,11 +33,6 @@ $post = View::$data[0];     //object
                                 [тестовый комментарий]
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis commodo risus ac pulvinar lobortis. Aliquam id urna ac sem scelerisque feugiat vel et ex. Suspendisse tristique faucibus diam et posuere.
                             </div>
-                            <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
-                                <div class="p-1" style="text-align: right; font-size: 80%">22 Dec 2019 08:36 'User2':</div>
-                                [тестовый комментарий]
-                            Nunc dignissim eu nibh vitae mattis. Praesent eget viverra metus, quis sagittis risus.
-                            </div>
 
                             <div class="mt-3 p-2 text-wrap rounded" style="background-color: #DBDBDB; color: dimgrey; text-align: left;">
                                 <div class="p-1" style="text-align: right; font-size: 80%">22 Dec 2019 11:36 'User3':</div>
@@ -57,7 +53,7 @@ $post = View::$data[0];     //object
                     <div class="col">
 
                         <!-- ДОДЕЛАТЬ ! вставить сюда переменные из контроллера, страница галлереи, с которой был переход -->
-                        <a href="../../<?php //$_SERVER[''] ?>"><button type="button" class="btn btn-dark btn-lg"><| Back to the gallery</button></a>
+                        <a href="http://test.com"><button type="button" class="btn btn-dark btn-lg"><- Back to the gallery</button></a>
                     </div>
                 </div>
                 <!-- Back button -->
@@ -72,18 +68,15 @@ $post = View::$data[0];     //object
                     <!-- заголовок правого блока -->
                     <div class="col-11 mt-1 text-white text-right" >
 
-                        <!-- вставить сюда переменные !  -->
-                        <?php $user = UserRepository::getFace($post->user_id);
-                        echo $user['nickname'];?>
+                        <!-- переменные $user  -->
+                        <b>
+                        <?php echo $user->nickname;?></b>
                         <br>
                         <div style="color: dimgrey; text-align: right; font-size: 80%"> user id #<?php echo $post->user_id;?></div>
                     </div>
                     <!-- avatar -->
                     <div class="col-1 p-1">
-                        <img src="
-                        <?php $user = UserRepository::getFace($post->user_id);
-                        echo $user['userpic'];?>
-                        " alt="<userpic>" class="rounded-circle shadow float-right" style="max-height: 45px; align-content: flex-end">
+                        <img src="<?php echo $user->userpic;?>" alt="<userpic>" class="rounded-circle shadow float-right" style="max-height: 45px; align-content: flex-end">
 
 
                     </div>
@@ -109,7 +102,7 @@ $post = View::$data[0];     //object
                             <div class="mx-auto">
                                     <!-- контейнер изображения -->
                                     <div>
-                                        <img src="<?php echo $post->pic_link?>" alt="picture" class="p-4 img-thumbnail rounded mx-auto d-block" style="margin: 20px; background-color: #DBDBDB">
+                                        <img src="<?php echo $post->pic_link;?>" alt="picture" class="p-4 img-thumbnail rounded mx-auto d-block" style="margin: 20px; background-color: #DBDBDB">
                                     </div>
                             </div>
                         </div>

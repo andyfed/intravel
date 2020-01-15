@@ -4,7 +4,7 @@ namespace Models;
 
 interface Repository
 {
-    public function add($item);
+    public function add(array $data);
     public function update($item);
     public function delete($item);
 

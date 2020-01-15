@@ -10,7 +10,7 @@ class picHandler
         if (is_string($picLink))
             return picHandler::createPreviewLink($picLink);
         else
-            return "/var/www/test.com/Storage/PostPictures/plug.png";
+            return "/var/www/test.com/Storage/PostPics/plug.png";
     }
 
     // return changed URI of the post
@@ -29,14 +29,13 @@ class picHandler
 
 
     public function getUserpic($userId) {
-        $avatar = "/../../Storage/AvatarPictures/".$userId.".jpg";
-        $plug = "/../../Storage/AvatarPictures/plug.jpg";
+        $userpic = "/var/www/test.com/Storage/UserPics/$userId.jpg";
+        $plug = "/../../Storage/UserPics/plug.jpg";
 
-        if (file_exists($avatar))
-                return $avatar;
-        else
+        if (!file_exists($userpic))
             return $plug;
-
+        else
+            return "/../../Storage/UserPics/$userId.jpg";
     }
 
 
